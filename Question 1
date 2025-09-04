@@ -1,1 +1,31 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    short drinksCnt, sandCnt;
+    const short drinkPrice = 2, sandPrice = 4;
+    short total = 0;
+
+    cout << "--------------------MENU------------------\n";
+    cout << "Drinks......................... $2\n";
+    cout << "Sandwiches..................... $4\n\n";
+
+    cout << "How many drinks? ";      cin >> drinksCnt;
+    cout << "How many sandwiches: ";  cin >> sandCnt;
+
+    int acc = 0;  // work in 32-bit regs, assign back to short at end
+    __asm {
+        movsx   eax, drinksCnt    // eax = drinksCnt
+        imul    eax, eax, 2       // eax = drinksCnt * 2
+        mov     acc, eax
+
+        movsx   eax, sandCnt      // eax = sandCnt
+        imul    eax, eax, 4       // eax = sandCnt * 4
+        add     acc, eax          // total = 2*d + 4*s
+    }
+    total = static_cast<short>(acc);
+
+    cout << "\nYour total bill $" << total << "\n";
+    return 0;
+}
 
